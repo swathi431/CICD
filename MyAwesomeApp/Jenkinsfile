@@ -1,0 +1,33 @@
+pipeline{
+  environment {
+  version = "version_$BUILD_NUMBER"
+}
+  agent {
+  label 'dockerlabel'
+}
+stages {
+  stage('checkout') {
+    steps {
+      checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/swathi431/CICD.git']]])
+    }
+  }
+
+  stage('build') {
+    steps {
+      sh 'mvn -f MyAwesomeApp/pom.xml clean install'
+    }
+  }
+  stage('docker image') {
+     steps {
+       script{
+        dockerImage = docker.build("swthi31/proj:$version","MyAwesomeApp")
+       }
+       }
+  } 
+  stage('helm upgrade'){
+    steps{
+      sh 'helm upgrade helm-node springChart' 
+    }
+  }
+}
+}
