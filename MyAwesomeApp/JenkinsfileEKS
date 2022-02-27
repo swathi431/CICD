@@ -8,9 +8,7 @@ agent none
 }*/
 stages {
   stage('checkout') {
-  agent {
-  label 'dockerlabel'
-}
+
     steps {
       checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/swathi431/CICD.git']]])
     }
