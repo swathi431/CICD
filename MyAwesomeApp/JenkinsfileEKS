@@ -2,11 +2,15 @@ pipeline{
   environment {
   version = "version_$BUILD_NUMBER"
 }
+agent none
+  /*agent {
+  label 'dockerlabel'
+}*/
+stages {
+  stage('checkout') {
   agent {
   label 'dockerlabel'
 }
-stages {
-  stage('checkout') {
     steps {
       checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/swathi431/CICD.git']]])
     }
